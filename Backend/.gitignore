@@ -1,5 +1,3 @@
-# Backend
-
 *.swp
 *.*~
 project.lock.json
