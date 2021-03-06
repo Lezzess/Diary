@@ -1,3 +1,6 @@
+using System.Reflection;
+using Application.Dtos.WeatherForecast;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -8,6 +11,8 @@ namespace RestApi
 {
     public class Startup
     {
+        private const string FrontendDevelopmentDomain = "http://localhost:4200";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -18,6 +23,11 @@ namespace RestApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(
+                options => options.AddDefaultPolicy(
+                    builder => builder.WithOrigins(FrontendDevelopmentDomain)));
+
+            services.AddMediatR(Assembly.GetAssembly(typeof(WeatherForecastDto)));
             services.AddControllers();
         }
 
@@ -32,6 +42,8 @@ namespace RestApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors();
 
             app.UseAuthorization();
 
