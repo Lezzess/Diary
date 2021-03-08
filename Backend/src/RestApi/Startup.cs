@@ -1,17 +1,16 @@
-using System.Reflection;
-using Application.Dtos.WeatherForecast;
-using MediatR;
+using Application.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Persistence.DependencyInjection;
+using RestApi.DependencyInjection;
 
 namespace RestApi
 {
     public class Startup
     {
-        private const string FrontendDevelopmentDomain = "http://localhost:4200";
 
         public Startup(IConfiguration configuration)
         {
@@ -23,12 +22,9 @@ namespace RestApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(
-                options => options.AddDefaultPolicy(
-                    builder => builder.WithOrigins(FrontendDevelopmentDomain)));
-
-            services.AddMediatR(Assembly.GetAssembly(typeof(WeatherForecastDto)));
-            services.AddControllers();
+            services.AddApplicationDependencies();
+            services.AddPersistenceDependencies();
+            services.AddRestApiDependencies();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
